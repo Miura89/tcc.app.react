@@ -4,6 +4,11 @@ import { router } from 'expo-router';
 import RNPickerSelect from 'react-native-picker-select';
 import axios from 'axios';
 
+const local = true; 
+export const API_URL = local
+  ? 'http://192.168.0.62:3000'
+  : 'https://tccback-production.up.railway.app';
+
 export default function CadastroScreen() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -15,6 +20,7 @@ export default function CadastroScreen() {
   const [genero, setGenero] = useState('');
   const [sexualidade, setSexualidade] = useState('');
   const [etnia, setEtnia] = useState('');
+  
 
   const handleHome = () => {
     router.replace('/');
@@ -37,7 +43,7 @@ export default function CadastroScreen() {
     console.log('Enviando:', usuario); 
   
     try {
-      const response = await fetch('http://192.168.15.103:3000/api/usuarios', {
+      const response = await fetch(`${API_URL}/api/usuarios`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(usuario)

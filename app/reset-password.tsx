@@ -1,13 +1,38 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
+
+const local = true; 
+export const API_URL = local
+  ? 'http://192.168.0.62:3000'
+  : 'https://tccback-production.up.railway.app';
+
 
 export default function ResetPasswordScreen() {
   const [email, setEmail] = useState('');
 
-  const handleResetPassword = () => {
-    // Add reset password logic here
-    router.back();
+  const handleResetPassword = async () => {
+    const bodyEmail = {
+      "emailTo": email
+    }
+    console.log(bodyEmail.emailTo)
+    try {
+      const response = await fetch(`${API_URL}/api/usuarios/enviar-email-redefinir`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bodyEmail)
+      });
+  
+      const data = await response.json();
+      if(data.flag == true)
+      {
+        Alert.alert('Sucesso', 'Email enviado com suceso');
+      }
+      else
+        Alert.alert('Algo deu errado', '')
+    } catch (error) {
+      console.error('Erro ao enviar email:', error);
+    }
   };
 
   return (

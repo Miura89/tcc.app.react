@@ -3,6 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } fro
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const local = false; 
+export const API_URL = local
+  ? 'http://192.168.0.62:3000'
+  : 'https://tccback-production.up.railway.app';
+
 export default function LoginScreen() {
   const [email, setUsername] = useState('');
   const [senha, setSenha] = useState('');
@@ -18,7 +23,7 @@ export default function LoginScreen() {
     const login = { email, senha };
 
     try {
-      const response = await fetch('http://tccback-production.up.railway.app/api/login', {
+      const response = await fetch(`${API_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(login),
